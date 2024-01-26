@@ -1,20 +1,22 @@
 import os
-from dotenv import load_dotenv
-from connection import ConecctionMongoDB
+import configparser
 from colorama import Fore, Style
 
-load_dotenv()
+from connection import ConecctionMongoDB
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 # Datos de conexión a MongoDB Atlas
-user = os.getenv('MONGODB_USER')
-password = os.getenv('MONGODB_PASS')
-database = os.getenv('MONGODB_DB')
-collection = os.getenv('MONGODB_COLLECTION')
-cluster = os.getenv('MONGODB_CLUSTER')
+user = config['setup_connection']['mongodb_user']
+password = config['setup_connection']['mongodb_password']
+cluster = config['setup_connection']['mongodb_cluster']
+database = config['setup_connection']['mongodb_db']
+collection = config['setup_connection']['mongodb_collection']
 
 connection_markdown = ConecctionMongoDB(user, password, cluster, database, collection)
 
 # Directorio donde se encuentran los archivos markdown
-directorio = 'Directorio_markdowns'
+directorio = config["config_directory"]['directory']
 
 
 # Recorre todos los archivos en el directorio especificado
