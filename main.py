@@ -1,28 +1,10 @@
 import os
-import configparser
 import time
 from colorama import Fore, Style
 
 from connection import ConecctionMongoDB
-
-config = configparser.ConfigParser()
-config.read('config.ini')
-# Datos de conexión a MongoDB Atlas
-user:str = config['setup_connection']['mongodb_user']
-password:str = config['setup_connection']['mongodb_pass']
-cluster:str = config['setup_connection']['mongodb_cluster']
-database:str = config['setup_connection']['mongodb_db']
-collection:str = config['setup_connection']['mongodb_collection']
-
-connection_markdown = ConecctionMongoDB(user, password, cluster, database, collection)
-
-# Directorio donde se encuentran los archivos markdown
-directorio:str = config['config_directory']['directory']
-
-## Estilos
-ERROR_TEXT = f'{Fore.RED}{Style.BRIGHT}ERROR{Fore.RESET}{Style.NORMAL}:'
-OK_TEXT = f'{Fore.GREEN}{Style.BRIGHT}OK{Fore.RESET}{Style.NORMAL}:'
-GETTING_BACK_TEXT = f'{Fore.BLACK}Volviento...{Style.NORMAL}'
+from reeplace import reeplace_document, result_replace_document
+from constants import *
 
 
 def take_option(max:int, min:int, text:str = 'Selecciona una opción:') -> int:
@@ -50,7 +32,7 @@ def upload_document() -> None:
     for real_file_id, filename in enumerate(os.listdir(directorio)):
         if filename.endswith('.md'):
             number_files_md += 1
-            files_md[number_files_md] = real_file_id
+            files_md[number_files_md] = (real_file_id, filename)
             print(f'   {Fore.YELLOW}{Style.BRIGHT}{number_files_md}.{Fore.RESET}{Style.NORMAL}   {filename}')
     
     # Comprueba si hay archivos markdown disponibles en el directorio
@@ -68,19 +50,18 @@ def upload_document() -> None:
         return
     else:
         # Comprueba si el archivo ya existe en la Base de Datos
-        filename = os.listdir(directorio)[files_md[file_id]]
+        filename = files_md[file_id][1]
         if connection_markdown.count_documents('name', filename) > 0:
             print(f'{ERROR_TEXT} Ese archivo ya existe en la Base de Datos')
             replace = True # Pregunta si quiere reemplazarlo por el existente
             while replace:
                 replace_question = input(f'¿Quieres reemplazarlo? (s/n): ')
                 if replace_question.lower() == 's':
-                    reeplace_document(files_md[file_id])
-                    return
+                    result_replace_document(files_md, file_id)
                 elif replace_question.lower() == 'n':
                     print(f'{OK_TEXT}: ¡No se almacenó ningún archivo!\n {GETTING_BACK_TEXT}')
-                    time.sleep(2)
-                    return
+                time.sleep(2)
+                return
         else:
             with open(os.path.join(directorio, filename), 'r') as file: # Lee el archivo
                 content = file.read() 
@@ -91,18 +72,6 @@ def upload_document() -> None:
         print(f' {GETTING_BACK_TEXT}')
         time.sleep(2)
         return 
-
-
-def reeplace_document(file_id) -> None:
-    filename = os.listdir(directorio)[file_id]
-    with open(os.path.join(directorio, filename), 'r') as file: # Lee el archivo
-        new_content = file.read()
-    # Reemplaza el contenido del archivo en la Base de Datos
-    connection_markdown.update_document('name', filename, 'content', new_content)
-    print(f'{OK_TEXT} ¡Archivo {filename} reemplazado con éxito en Base de Datos!')
-    print(f' {GETTING_BACK_TEXT}')
-    time.sleep(3)
-    return
 
 
 def reeplace_document_menu() -> None:
@@ -116,8 +85,9 @@ def reeplace_document_menu() -> None:
         if filename.endswith('.md'):
             if connection_markdown.count_documents('name', filename) > 0:
                 number_files_md += 1
-                files_md[number_files_md] = real_file_id
+                files_md[number_files_md] = (real_file_id, filename)
                 print(f'   {Fore.YELLOW}{Style.BRIGHT}{number_files_md}.{Fore.RESET}{Style.NORMAL}   {filename}')
+    
     if number_files_md == 0: 
         print(f'    {Fore.BLACK}{Style.BRIGHT}-. {Style.NORMAL}Sin Archivos Coincidentes{Fore.RESET}\n {GETTING_BACK_TEXT}')
         time.sleep(3)
@@ -129,7 +99,8 @@ def reeplace_document_menu() -> None:
         time.sleep(3)
         return
     else:
-        reeplace_document(files_md[menu_file_id])
+        result_replace_document(files_md, menu_file_id)
+        return
 
 
 def main():
@@ -156,6 +127,9 @@ def main():
             upload_document()
         elif option == 2:
             reeplace_document_menu()
+        elif option == 4:
+            print(f'{OK_TEXT} ¡Hasta luego! 😯')
+            break
             
 
 main()
