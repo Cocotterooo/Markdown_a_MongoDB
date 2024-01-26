@@ -1,5 +1,6 @@
 ##  (2024-01-26)
 
+* chore: :memo: update changelog ([0cb551c](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/0cb551c))
 * fix: :bug: Corrección de Errores ([5b13505](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/5b13505))
 * fix: :wrench: config.ini reañadido :/ ([9beb568](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/9beb568))
 * .gitignore modificado ([3275b93](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/3275b93))
