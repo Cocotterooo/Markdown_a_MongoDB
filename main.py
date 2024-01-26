@@ -3,7 +3,7 @@ import time
 from colorama import Fore, Style
 
 from connection import ConecctionMongoDB
-from reeplace import reeplace_document, result_replace_document
+from functions import replace_document
 from constants import *
 
 
@@ -57,9 +57,12 @@ def upload_document() -> None:
             while replace:
                 replace_question = input(f'¿Quieres reemplazarlo? (s/n): ')
                 if replace_question.lower() == 's':
-                    result_replace_document(files_md, file_id)
+                    print(replace_document(files_md, file_id))
+                    input('Presiona enter para continuar...')
                 elif replace_question.lower() == 'n':
-                    print(f'{OK_TEXT}: ¡No se almacenó ningún archivo!\n {GETTING_BACK_TEXT}')
+                    print(f'{OK_TEXT}: ¡No se almacenó ningún archivo!')
+                    replace = False
+                print(f' {GETTING_BACK_TEXT}')
                 time.sleep(2)
                 return
         else:
@@ -92,15 +95,50 @@ def reeplace_document_menu() -> None:
         print(f'    {Fore.BLACK}{Style.BRIGHT}-. {Style.NORMAL}Sin Archivos Coincidentes{Fore.RESET}\n {GETTING_BACK_TEXT}')
         time.sleep(3)
         return
+    # Pregunta al usuario que archivo quiere reemplazar
     print(f'\n {Fore.BLACK}{Style.BRIGHT}0. {Style.NORMAL}si no quieres reemplazar ningún archivo.{Fore.RESET}')
-    menu_file_id = take_option(number_files_md, 0, 'Selecciona el archivo a reemplazar: ') # Pregunta al usuario que archivo quiere reemplazar
+    menu_file_id = take_option(number_files_md, 0, 'Selecciona el archivo a reemplazar: ') 
     if menu_file_id == 0:
-        print(f'{OK_TEXT}: ¡No se reemplazó ningún archivo!\n {GETTING_BACK_TEXT}')
+        print(f'{OK_TEXT} ¡No se reemplazó ningún archivo!\n {GETTING_BACK_TEXT}')
         time.sleep(3)
         return
     else:
-        result_replace_document(files_md, menu_file_id)
+        print(replace_document(files_md, menu_file_id))
+        input('Presiona enter para continuar...')
+        print(f' {GETTING_BACK_TEXT}')
+        time.sleep(2)
         return
+
+def delete_document_menu() -> None:
+    os.system('cls')
+    print(f'{Style.BRIGHT}# ELIMINACIÓN DE ARCHIVOS #:{Style.NORMAL}')
+    print(f'{Style.BRIGHT}# Archivos en la Base de Datos:{Style.NORMAL}\n | ID | Nombre de Archivo |')
+    file_id_names = {}
+    for id, doc in enumerate (connection_markdown.show_all_for_key('name')):
+        nombre = doc['name']
+        file_id_names[id] = nombre
+        print(f'   {Fore.YELLOW}{Style.BRIGHT}{id}.{Fore.RESET}{Style.NORMAL}   {nombre}')
+    file_for_delete = take_option(len(file_id_names), 1, 'Introduce el ID del archivo a eliminar: ')
+    file_name = file_id_names[int(file_for_delete)]
+    print(f'Vas a eliminar el archivo {file_name}')
+    sure = input('¿Estás seguro? (s/n): ')
+    if sure.lower() == 's':
+        print(delete_document('name', file_name))
+        input('Presiona enter para continuar...')
+    else:
+        print(f'{OK_TEXT} ¡No se eliminó ningún archivo!')
+    print(f' {GETTING_BACK_TEXT}')
+    time.sleep(2)
+    return
+
+
+def delete_document(key:str, filename:str) -> tuple:
+    try:
+        connection_markdown.delete_document(key, filename)
+        return f'{OK_TEXT} ¡Archivo {filename} eliminado de la Base de Datos con éxito!'
+    except Exception as e:
+        return f'{ERROR_TEXT} ¡No se pudo eliminar el archivo! ({e})'
+
 
 
 def main():
@@ -127,6 +165,8 @@ def main():
             upload_document()
         elif option == 2:
             reeplace_document_menu()
+        elif option == 3:
+            delete_document_menu()
         elif option == 4:
             print(f'{OK_TEXT} ¡Hasta luego! 😯')
             break
