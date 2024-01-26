@@ -1,0 +1,25 @@
+##  (2024-01-26)
+
+* fix: :bug: Corrección de Errores ([5b13505](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/5b13505))
+* fix: :wrench: config.ini reañadido :/ ([9beb568](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/9beb568))
+* .gitignore modificado ([3275b93](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/3275b93))
+* .gitignore modificado ([31fe63a](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/31fe63a))
+* Actualizado seguimiento ([f911204](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/f911204))
+* Actualizado seguimiento ([1f08df1](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/1f08df1))
+* Actualizado seguimiento ([cdcd4bb](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/cdcd4bb))
+* Añadida comprobación de si ya existe ese archivo en la base de datos ([b79a658](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/b79a658))
+* añadidos campos de conexion a base de datos en el .env ([3806423](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/3806423))
+* clase ConnectionMongoDB creada ([9e2a22c](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/9e2a22c))
+* Creado archivo config.ini ([7185861](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/7185861))
+* creados ficheros .env .gitignore y main.py ([849a25c](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/849a25c))
+* Delete venv directory ([6c8e313](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/6c8e313))
+* fix config.ini ([a8c5fd9](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/a8c5fd9))
+* habilitado para el uso de configparser ([c93399c](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/c93399c))
+* Initial commit ([b916a54](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/b916a54))
+* main funcional Sistema para subir archivos md correcto ([8449c11](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/8449c11))
+* Rework de la terminal ([6b2f4b2](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/6b2f4b2))
+* Update .env ([aaefdb9](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/aaefdb9))
+* update .gitignore ([08a0d29](https://github.com/Cocotterooo/Markdown_a_MongoDB/commit/08a0d29))
+
+
+
