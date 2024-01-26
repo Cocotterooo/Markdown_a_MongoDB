@@ -8,7 +8,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 # Datos de conexión a MongoDB Atlas
 user = config['setup_connection']['mongodb_user']
-password = config['setup_connection']['mongodb_password']
+password = config['setup_connection']['mongodb_pass']
 cluster = config['setup_connection']['mongodb_cluster']
 database = config['setup_connection']['mongodb_db']
 collection = config['setup_connection']['mongodb_collection']
@@ -16,7 +16,7 @@ collection = config['setup_connection']['mongodb_collection']
 connection_markdown = ConecctionMongoDB(user, password, cluster, database, collection)
 
 # Directorio donde se encuentran los archivos markdown
-directorio = config["config_directory"]['directory']
+directorio = config['config_directory']['directory']
 
 
 # Recorre todos los archivos en el directorio especificado
