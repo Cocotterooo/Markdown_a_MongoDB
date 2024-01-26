@@ -2,26 +2,12 @@ import os
 import time
 from colorama import Fore, Style
 
-from connection import ConecctionMongoDB
-from functions import replace_document
+from functions import replace_document, delete_document, take_option
 from constants import *
 
 
-def take_option(max:int, min:int, text:str = 'Selecciona una opción:') -> int:
-    error = True
-    while error:
-        try:
-            option = int(input(f'{Style.BRIGHT}#{Style.NORMAL} {text}'))
-            if option > max or option < min:
-                print(f'{ERROR_TEXT} Debes ingresar un número válido!')
-            else:
-                error = False
-        except ValueError:
-            print(f'{ERROR_TEXT} Debes ingresar un número.')
-    return option
 
-
-def upload_document() -> None:
+def upload_document_menu() -> None:
     os.system('cls')
     print(f'{Style.BRIGHT}# SUBIDA DE ARCHIVOS #{Style.NORMAL}')
     print(f'{Style.BRIGHT}# Archivos markdown encontrados:{Style.NORMAL}\n | ID | Nombre de Archivo |')
@@ -45,7 +31,7 @@ def upload_document() -> None:
         file_id = take_option(number_files_md, 0) # Pregunta al usuario que archivo quiere almacenar
     
     if file_id == 0:
-        print(f'{OK_TEXT}: ¡No se almacenó ningún archivo!\n {GETTING_BACK_TEXT}')
+        print(f'{OK_TEXT} ¡No se almacenó ningún archivo!\n {GETTING_BACK_TEXT}')
         time.sleep(2)
         return
     else:
@@ -70,7 +56,7 @@ def upload_document() -> None:
                 content = file.read() 
             # Almacena el contenido del archivo en MongoDB
             document = {'name': filename, 'content': content}
-            connection_markdown.upload_document(document)
+            connection_markdown._menu(document)
             print(f'{OK_TEXT}: ¡Archivos almacenados con éxito en Base de Datos!')
         print(f' {GETTING_BACK_TEXT}')
         time.sleep(2)
@@ -109,35 +95,35 @@ def reeplace_document_menu() -> None:
         time.sleep(2)
         return
 
+
 def delete_document_menu() -> None:
     os.system('cls')
     print(f'{Style.BRIGHT}# ELIMINACIÓN DE ARCHIVOS #:{Style.NORMAL}')
     print(f'{Style.BRIGHT}# Archivos en la Base de Datos:{Style.NORMAL}\n | ID | Nombre de Archivo |')
-    file_id_names = {}
-    for id, doc in enumerate (connection_markdown.show_all_for_key('name')):
+    # Imprime todos los archivos de la Collection de la Base de Datos
+    file_id_names = {} # id: nombre
+    for menu_id, doc in enumerate (connection_markdown.show_all_for_key('name')):
+        menu_id += 1
         nombre = doc['name']
-        file_id_names[id] = nombre
-        print(f'   {Fore.YELLOW}{Style.BRIGHT}{id}.{Fore.RESET}{Style.NORMAL}   {nombre}')
-    file_for_delete = take_option(len(file_id_names), 1, 'Introduce el ID del archivo a eliminar: ')
-    file_name = file_id_names[int(file_for_delete)]
-    print(f'Vas a eliminar el archivo {file_name}')
-    sure = input('¿Estás seguro? (s/n): ')
-    if sure.lower() == 's':
-        print(delete_document('name', file_name))
-        input('Presiona enter para continuar...')
+        file_id_names[menu_id] = nombre
+        print(f'   {Fore.YELLOW}{Style.BRIGHT}{menu_id}.{Fore.RESET}{Style.NORMAL}   {nombre}')
+    
+    print(f'\n {Fore.BLACK}{Style.BRIGHT}0. {Style.NORMAL}si no quieres almacenar ningún archivo.{Fore.RESET}')
+    file_for_delete = take_option(len(file_id_names), 0, 'Introduce el ID del archivo a eliminar: ')
+    if file_for_delete == 0:
+        print(f'{OK_TEXT} ¡No se eliminó ningún archivo!')   
     else:
-        print(f'{OK_TEXT} ¡No se eliminó ningún archivo!')
+        file_name = file_id_names[int(file_for_delete)]
+        print(f'Vas a eliminar el archivo {file_name}')
+        sure = input('¿Estás seguro? (s/n): ')
+        if sure.lower() == 's':
+            print(delete_document('name', file_name))
+            input('Presiona enter para continuar...')
+        else:
+            print(f'{OK_TEXT} ¡No se eliminó ningún archivo!')
     print(f' {GETTING_BACK_TEXT}')
     time.sleep(2)
     return
-
-
-def delete_document(key:str, filename:str) -> tuple:
-    try:
-        connection_markdown.delete_document(key, filename)
-        return f'{OK_TEXT} ¡Archivo {filename} eliminado de la Base de Datos con éxito!'
-    except Exception as e:
-        return f'{ERROR_TEXT} ¡No se pudo eliminar el archivo! ({e})'
 
 
 
@@ -162,7 +148,7 @@ def main():
             except ValueError:
                 print(f'{ERROR_TEXT} Debes ingresar un número.')
         if option == 1:
-            upload_document()
+            upload_document_menu()
         elif option == 2:
             reeplace_document_menu()
         elif option == 3:
