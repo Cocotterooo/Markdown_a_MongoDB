@@ -18,8 +18,8 @@ class ConecctionMongoDB:
     def obtain_document(self, key, id):
         return self.__collection.find_one({key: id})
     
-    def update_document(self, key, id, documento):
-        self.__collection.update_one({key: id}, {'$set': documento})
+    def update_document(self, key, id, key_for_replaze, new_content):
+        self.__collection.update_one({key: id}, {'$set': {key_for_replaze: new_content}})
     
     def delete_document(self, key, id,):
         self.__collection.delete_one({key: id})
