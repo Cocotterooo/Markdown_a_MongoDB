@@ -2,3 +2,4 @@ venv
 /config.ini 
 /Directorio_markdowns
 /tempCodeRunnerFile.py
+/__pycache__
