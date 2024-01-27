@@ -22,7 +22,7 @@ def delete_document(key:str, filename:str) -> str:
         return f'{ERROR_TEXT} ¡No se pudo eliminar el archivo! ({e})'
 
 
-def take_option(max:int, min:int, text:str = 'Selecciona una opción:') -> int:
+def take_option(max:int, min:int, text:str = 'Selecciona una opción: ') -> int:
     error = True
     while error:
         try:

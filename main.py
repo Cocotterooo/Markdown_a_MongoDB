@@ -46,7 +46,7 @@ def upload_document_menu() -> None:
                     print(replace_document(files_md, file_id))
                     input('Presiona enter para continuar...')
                 elif replace_question.lower() == 'n':
-                    print(f'{OK_TEXT}: ¡No se almacenó ningún archivo!')
+                    print(f'{OK_TEXT} ¡No se almacenó ningún archivo!')
                     replace = False
                 print(f' {GETTING_BACK_TEXT}')
                 time.sleep(2)
@@ -56,8 +56,8 @@ def upload_document_menu() -> None:
                 content = file.read() 
             # Almacena el contenido del archivo en MongoDB
             document = {'name': filename, 'content': content}
-            connection_markdown._menu(document)
-            print(f'{OK_TEXT}: ¡Archivos almacenados con éxito en Base de Datos!')
+            connection_markdown.upload_document(document)
+            print(f'{OK_TEXT} ¡Archivos almacenados con éxito en Base de Datos!')
         print(f' {GETTING_BACK_TEXT}')
         time.sleep(2)
         return 
