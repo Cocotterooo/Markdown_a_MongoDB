@@ -2,6 +2,7 @@ from constants import *
 import os
 
 def replace_document(files_md:dict, menu_file_id) -> str:
+    '''Reemplaza el contenido de un archivo markdown en la Base de Datos'''
     document = files_md[menu_file_id] # id, filename
     filename = document[1]
     try:
@@ -15,22 +16,9 @@ def replace_document(files_md:dict, menu_file_id) -> str:
 
 
 def delete_document(key:str, filename:str) -> str:
+    '''Elimina un archivo de la Base de Datos (No importa el tipo de archivo)'''
     try:
         connection_markdown.delete_document(key, filename)
         return f'{OK_TEXT} ¡Archivo {filename} eliminado de la Base de Datos con éxito!'
     except Exception as e:
         return f'{ERROR_TEXT} ¡No se pudo eliminar el archivo! ({e})'
-
-
-def take_option(max:int, min:int, text:str = 'Selecciona una opción: ') -> int:
-    error = True
-    while error:
-        try:
-            option = int(input(f'{Style.BRIGHT}#{Style.NORMAL} {text}'))
-            if option > max or option < min:
-                print(f'{ERROR_TEXT} Debes ingresar un número válido!')
-            else:
-                error = False
-        except ValueError:
-            print(f'{ERROR_TEXT} Debes ingresar un número.')
-    return option

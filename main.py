@@ -2,12 +2,32 @@ import os
 import time
 from colorama import Fore, Style
 
-from functions import replace_document, delete_document, take_option
+from functions import *
 from constants import *
 
+def take_option(max:int, min:int, text:str = 'Selecciona una opción: ') -> int:
+    '''Pregunta al usuario que opción quiere y la devuelve'''
+    error = True
+    while error:
+        try:
+            option = int(input(f'{Style.BRIGHT}#{Style.NORMAL} {text}'))
+            if option > max or option < min:
+                print(f'{ERROR_TEXT} Debes ingresar un número válido!')
+            else:
+                error = False
+        except ValueError:
+            print(f'{ERROR_TEXT} Debes ingresar un número.')
+    return option
 
 
 def upload_document_menu() -> None:
+    '''
+    Menú para Subir un archivo markdown a la Base de Datos.
+    - Muestra los archivos markdown disponibles en el directorio local, si no hay ninguno, se sale.
+    - Pregunta al usuario que archivo quiere almacenar.
+    * Si el archivo ya existe en la Base de Datos, pregunta si quiere reemplazarlo.
+    - Almacena el archivo en la Base de Datos llamando a la función upload_document().
+    '''
     os.system('cls')
     print(f'{Style.BRIGHT}# SUBIDA DE ARCHIVOS #{Style.NORMAL}')
     print(f'{Style.BRIGHT}# Archivos markdown encontrados:{Style.NORMAL}\n | ID | Nombre de Archivo |')
@@ -64,6 +84,12 @@ def upload_document_menu() -> None:
 
 
 def reeplace_document_menu() -> None:
+    '''
+    Menú para Reemplazar un archivo markdown en la Base de Datos.
+    - Muestra los archivos markdown disponibles en el directorio que 
+    además coinciden en nombre con alguno de la Base de Datos, si no hay ninguno, se sale.
+    - Reemplaza el contenido del archivo en la Base de Datos llamando a la función replace_document().
+    '''
     os.system('cls')
     print(f'{Style.BRIGHT}# REEMPLAZO DE ARCHIVOS #:{Style.NORMAL}')
     print(f'{Style.BRIGHT}# Archivos markdown coincidentes:{Style.NORMAL}\n | ID | Nombre de Archivo |')
@@ -97,6 +123,13 @@ def reeplace_document_menu() -> None:
 
 
 def delete_document_menu() -> None:
+    '''
+    Menú para Eliminar un archivo markdown de la Base de Datos.
+    - Muestra los todos archivos disponibles en la Base de Datos, si no hay ninguno, se sale.
+    - Pregunta al usuario que archivo quiere eliminar y si está seguro.
+    - Elimina el archivo de la Base de Datos llamando a la función delete_document().
+    * No importa el tipo de archivo.
+    '''
     os.system('cls')
     print(f'{Style.BRIGHT}# ELIMINACIÓN DE ARCHIVOS #:{Style.NORMAL}')
     print(f'{Style.BRIGHT}# Archivos en la Base de Datos:{Style.NORMAL}\n | ID | Nombre de Archivo |')
@@ -107,7 +140,11 @@ def delete_document_menu() -> None:
         nombre = doc['name']
         file_id_names[menu_id] = nombre
         print(f'   {Fore.YELLOW}{Style.BRIGHT}{menu_id}.{Fore.RESET}{Style.NORMAL}   {nombre}')
-    
+
+    if len(file_id_names) == 0: 
+        print(f'    {Fore.BLACK}{Style.BRIGHT}-. {Style.NORMAL}Sin Archivos Coincidentes{Fore.RESET}\n {GETTING_BACK_TEXT}')
+        time.sleep(3)
+        return
     print(f'\n {Fore.BLACK}{Style.BRIGHT}0. {Style.NORMAL}si no quieres almacenar ningún archivo.{Fore.RESET}')
     file_for_delete = take_option(len(file_id_names), 0, 'Introduce el ID del archivo a eliminar: ')
     if file_for_delete == 0:
@@ -137,16 +174,7 @@ def main():
             f'\n{Fore.YELLOW}{Style.BRIGHT}3.{Fore.RESET}{Style.NORMAL} Eliminar un archivo'
             f'\n{Fore.YELLOW}{Style.BRIGHT}4.{Fore.RESET}{Style.NORMAL} Salir'
         )
-        error = True
-        while error:
-            try:
-                option = int(input(f'{Style.BRIGHT}#{Style.NORMAL} Introduce una opción: '))
-                if option > 4 or option < 1:
-                    print('¡Debes ingresar un número válido!')
-                else:
-                    error = False
-            except ValueError:
-                print(f'{ERROR_TEXT} Debes ingresar un número.')
+        option = take_option(4, 1)
         if option == 1:
             upload_document_menu()
         elif option == 2:
