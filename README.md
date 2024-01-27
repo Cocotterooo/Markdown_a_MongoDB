@@ -9,4 +9,3 @@ Este proyecto está dedicado al manejo de archivos .md desde el almacenamiento l
  **3.** Ejecutar el script desde **main.py** (Se abrirá la terminal con varias opciones)
    > **1.** Subir Archivos **2.** Reemplazar Archivos **3.** Eliminar Archivos
 
-_Próximamente se podrá ejecutar desde un archivo.exe_
