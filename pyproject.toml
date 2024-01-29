@@ -9,7 +9,7 @@ readme = "README.md"
 python = "^3.10"
 colorama = "^0.4.6"
 pymongo = "^4.6.1"
-configparser = "^6.0.0"
+absl-py = "^2.1.0"
 
 
 [build-system]
