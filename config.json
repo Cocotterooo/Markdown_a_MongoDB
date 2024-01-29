@@ -1,0 +1,8 @@
+{
+    "database": {
+        "user": "axelrogg",
+        "password": "hQxO9luVnoITLwsK",
+        "host": "dai-cluster.6t5wtfj.mongodb.net",
+        "name": "dai"
+    }
+}
